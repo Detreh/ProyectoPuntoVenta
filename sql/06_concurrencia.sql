@@ -1,0 +1,65 @@
+USE punto_venta;
+
+-- Concurrencia
+-- Ejecutar las pruebas siguientes usando DOS sesiones/conexiones de Workbench.
+-- No ejecutar las instrucciones de ambas sesiones en una sola ventana de forma consecutiva.
+
+-- 6.1 ACID
+-- Atomicidad: registrar venta y sus detalles juntos o revertir todo.
+-- Consistencia: CHECK, FK y triggers conservan reglas del negocio.
+-- Aislamiento: las transacciones concurrentes se coordinan mediante niveles y bloqueos.
+-- Durabilidad: COMMIT confirma cambios persistentes.
+
+-- 6.2 Prueba READ COMMITTED
+-- SESION A:
+-- SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
+-- START TRANSACTION;
+-- UPDATE Productos SET precio = precio + 5 WHERE id_producto = 1;
+-- (dejar sin COMMIT)
+--
+-- SESION B:
+-- SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
+-- START TRANSACTION;
+-- SELECT precio FROM Productos WHERE id_producto = 1;
+-- (la lectura no debe observar el cambio sin confirmar de A)
+--
+-- SESION A:
+-- COMMIT;
+--
+-- SESION B:
+-- SELECT precio FROM Productos WHERE id_producto = 1;
+-- COMMIT;
+-- En READ COMMITTED, la segunda lectura puede observar el cambio confirmado,
+-- ilustrando una lectura no repetible si ambas lecturas se hacen en la transaccion B.
+
+-- 6.3 Prueba SERIALIZABLE
+-- SESION A:
+-- SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+-- START TRANSACTION;
+-- SELECT * FROM Productos WHERE id_producto = 1;
+-- (dejar la transaccion abierta)
+--
+-- SESION B:
+-- SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+-- START TRANSACTION;
+-- UPDATE Productos SET precio = precio + 1 WHERE id_producto = 1;
+-- (observar espera/bloqueo)
+--
+-- SESION A:
+-- COMMIT;
+--
+-- SESION B:
+-- COMMIT;
+-- SERIALIZABLE es mas restrictivo y puede bloquear operaciones concurrentes.
+
+-- 6.4 Prueba de COMMIT y ROLLBACK con venta (usar procedimiento)
+-- Venta válida: confirmar que se insertan venta y detalles y se descuenta inventario.
+-- CALL sp_registrar_venta(1,'Efectivo',JSON_ARRAY(JSON_OBJECT('id_producto',1,'cantidad',2)),@id);
+-- SELECT @id;
+-- SELECT * FROM Ventas WHERE id_venta=@id;
+-- SELECT * FROM DetalleVenta WHERE id_venta=@id;
+-- SELECT stock FROM Productos WHERE id_producto=1;
+--
+-- Venta inválida para rollback: cantidad superior al stock.
+-- CALL sp_registrar_venta(1,'Efectivo',JSON_ARRAY(JSON_OBJECT('id_producto',7,'cantidad',999)),@id_error);
+-- Revisar que no se inserte la venta y que stock no cambie.
