@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmLogin));
             lblTitulo = new Label();
             lblUsuario = new Label();
             txtUsuario = new TextBox();
@@ -35,12 +36,14 @@
             txtPassword = new TextBox();
             btnIniciarSesion = new Button();
             btnSalir = new Button();
+            pictureBox1 = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Location = new Point(265, 98);
+            lblTitulo.Location = new Point(394, 104);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(109, 20);
             lblTitulo.TabIndex = 0;
@@ -49,7 +52,7 @@
             // lblUsuario
             // 
             lblUsuario.AutoSize = true;
-            lblUsuario.Location = new Point(265, 134);
+            lblUsuario.Location = new Point(394, 140);
             lblUsuario.Name = "lblUsuario";
             lblUsuario.Size = new Size(59, 20);
             lblUsuario.TabIndex = 1;
@@ -57,7 +60,7 @@
             // 
             // txtUsuario
             // 
-            txtUsuario.Location = new Point(265, 157);
+            txtUsuario.Location = new Point(394, 163);
             txtUsuario.Name = "txtUsuario";
             txtUsuario.Size = new Size(208, 27);
             txtUsuario.TabIndex = 2;
@@ -65,7 +68,7 @@
             // lblPassword
             // 
             lblPassword.AutoSize = true;
-            lblPassword.Location = new Point(265, 197);
+            lblPassword.Location = new Point(394, 203);
             lblPassword.Name = "lblPassword";
             lblPassword.Size = new Size(70, 20);
             lblPassword.TabIndex = 3;
@@ -73,7 +76,7 @@
             // 
             // txtPassword
             // 
-            txtPassword.Location = new Point(265, 220);
+            txtPassword.Location = new Point(394, 226);
             txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
             txtPassword.Size = new Size(208, 27);
@@ -81,7 +84,7 @@
             // 
             // btnIniciarSesion
             // 
-            btnIniciarSesion.Location = new Point(265, 265);
+            btnIniciarSesion.Location = new Point(394, 271);
             btnIniciarSesion.Name = "btnIniciarSesion";
             btnIniciarSesion.Size = new Size(109, 29);
             btnIniciarSesion.TabIndex = 5;
@@ -91,7 +94,7 @@
             // 
             // btnSalir
             // 
-            btnSalir.Location = new Point(380, 265);
+            btnSalir.Location = new Point(509, 271);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(94, 29);
             btnSalir.TabIndex = 6;
@@ -99,11 +102,22 @@
             btnSalir.UseVisualStyleBackColor = true;
             btnSalir.Click += btnSalir_Click;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(169, 94);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(190, 206);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 7;
+            pictureBox1.TabStop = false;
+            // 
             // FrmLogin
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(pictureBox1);
             Controls.Add(btnSalir);
             Controls.Add(btnIniciarSesion);
             Controls.Add(txtPassword);
@@ -116,6 +130,7 @@
             Name = "FrmLogin";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Inicio de Sesión - Punto de Venta";
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -129,5 +144,6 @@
         private TextBox txtPassword;
         private Button btnIniciarSesion;
         private Button btnSalir;
+        private PictureBox pictureBox1;
     }
 }

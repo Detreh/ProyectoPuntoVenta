@@ -73,16 +73,16 @@
             // 
             // txtBuscar
             // 
-            txtBuscar.Location = new Point(138, 38);
+            txtBuscar.Location = new Point(147, 38);
             txtBuscar.Name = "txtBuscar";
-            txtBuscar.Size = new Size(725, 27);
+            txtBuscar.Size = new Size(709, 27);
             txtBuscar.TabIndex = 2;
             // 
             // btnBuscar
             // 
-            btnBuscar.Location = new Point(876, 38);
+            btnBuscar.Location = new Point(862, 38);
             btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(94, 29);
+            btnBuscar.Size = new Size(108, 29);
             btnBuscar.TabIndex = 3;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;

@@ -17,6 +17,9 @@ namespace PuntoVentaApp
         public FrmMenuPrincipal(string usuario, string perfil, FrmLogin login, string cadenaConexion)
         {
             InitializeComponent();
+            EstiloUI.Aplicar(this);
+            EstiloUI.AplicarColoresMenu(this);
+            EstiloUI.AgregarFranjaSuperior(this);
             this.usuario = usuario;
             this.perfil = perfil;
             this.login = login;
@@ -56,6 +59,24 @@ namespace PuntoVentaApp
         {
             FrmProductos productos = new FrmProductos(cadenaConexion, perfil);
             productos.ShowDialog();
+        }
+
+        private void btnClientes_Click(object sender, EventArgs e)
+        {
+            FrmClientes frm = new FrmClientes(cadenaConexion, perfil);
+            frm.ShowDialog();
+        }
+
+        private void btnVentas_Click(object sender, EventArgs e)
+        {
+            FrmVentas frm = new FrmVentas(cadenaConexion, perfil);
+            frm.ShowDialog();
+        }
+
+        private void btnReportes_Click(object sender, EventArgs e)
+        {
+            FrmConsultas frm = new FrmConsultas(cadenaConexion, perfil);
+            frm.ShowDialog();
         }
     }
 }

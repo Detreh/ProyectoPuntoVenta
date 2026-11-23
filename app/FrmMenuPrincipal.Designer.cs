@@ -41,7 +41,7 @@
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Location = new Point(86, 20);
+            lblTitulo.Location = new Point(60, 20);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(109, 20);
             lblTitulo.TabIndex = 0;
@@ -50,7 +50,7 @@
             // lblUsuario
             // 
             lblUsuario.AutoSize = true;
-            lblUsuario.Location = new Point(545, 20);
+            lblUsuario.Location = new Point(564, 20);
             lblUsuario.Name = "lblUsuario";
             lblUsuario.Size = new Size(62, 20);
             lblUsuario.TabIndex = 1;
@@ -58,31 +58,37 @@
             // 
             // btnProductos
             // 
-            btnProductos.Location = new Point(268, 133);
+            btnProductos.BackColor = SystemColors.Control;
+            btnProductos.ForeColor = Color.Black;
+            btnProductos.Location = new Point(226, 84);
             btnProductos.Name = "btnProductos";
-            btnProductos.Size = new Size(94, 29);
+            btnProductos.Size = new Size(175, 120);
             btnProductos.TabIndex = 2;
             btnProductos.Text = "Productos";
-            btnProductos.UseVisualStyleBackColor = true;
+            btnProductos.UseVisualStyleBackColor = false;
             btnProductos.Click += btnProductos_Click;
             // 
             // btnClientes
             // 
-            btnClientes.Location = new Point(513, 133);
+            btnClientes.BackColor = SystemColors.Control;
+            btnClientes.Location = new Point(454, 84);
             btnClientes.Name = "btnClientes";
-            btnClientes.Size = new Size(94, 29);
+            btnClientes.Size = new Size(172, 120);
             btnClientes.TabIndex = 3;
             btnClientes.Text = "Clientes";
-            btnClientes.UseVisualStyleBackColor = true;
+            btnClientes.UseVisualStyleBackColor = false;
+            btnClientes.Click += btnClientes_Click;
             // 
             // btnVentas
             // 
-            btnVentas.Location = new Point(268, 259);
+            btnVentas.BackColor = SystemColors.Control;
+            btnVentas.Location = new Point(226, 247);
             btnVentas.Name = "btnVentas";
-            btnVentas.Size = new Size(94, 29);
+            btnVentas.Size = new Size(175, 123);
             btnVentas.TabIndex = 4;
             btnVentas.Text = "Ventas";
-            btnVentas.UseVisualStyleBackColor = true;
+            btnVentas.UseVisualStyleBackColor = false;
+            btnVentas.Click += btnVentas_Click;
             // 
             // button1
             // 
@@ -95,18 +101,20 @@
             // 
             // btnReportes
             // 
-            btnReportes.Location = new Point(513, 247);
+            btnReportes.BackColor = SystemColors.Control;
+            btnReportes.Location = new Point(454, 247);
             btnReportes.Name = "btnReportes";
-            btnReportes.Size = new Size(94, 52);
+            btnReportes.Size = new Size(172, 123);
             btnReportes.TabIndex = 6;
             btnReportes.Text = "Consultas y Reportes";
-            btnReportes.UseVisualStyleBackColor = true;
+            btnReportes.UseVisualStyleBackColor = false;
+            btnReportes.Click += btnReportes_Click;
             // 
             // btnCerrarSesion
             // 
-            btnCerrarSesion.Location = new Point(716, 445);
+            btnCerrarSesion.Location = new Point(688, 426);
             btnCerrarSesion.Name = "btnCerrarSesion";
-            btnCerrarSesion.Size = new Size(123, 29);
+            btnCerrarSesion.Size = new Size(151, 48);
             btnCerrarSesion.TabIndex = 7;
             btnCerrarSesion.Text = "Cerrar sesión";
             btnCerrarSesion.UseVisualStyleBackColor = true;

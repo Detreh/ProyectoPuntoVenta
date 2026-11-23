@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using MySqlConnector;
+using PuntoVentaApp.Datos;
 
 namespace PuntoVentaApp
 {
@@ -13,12 +14,21 @@ namespace PuntoVentaApp
     {
         private string cadenaConexion;
         private string perfil;
+        private ProductosDAO productosDAO;
+
         public FrmProductos(string cadenaConexion, string perfil)
         {
             InitializeComponent();
+            EstiloUI.Aplicar(this);
+            EstiloUI.AgregarFranjaSuperior(this);
+
             this.cadenaConexion = cadenaConexion;
             this.perfil = perfil;
+
+            productosDAO = new ProductosDAO(cadenaConexion);
+
             CargarProductos();
+
             if (perfil != "Administrador")
             {
                 btnAgregar.Enabled = false;
@@ -31,41 +41,20 @@ namespace PuntoVentaApp
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
-                {
-                    conn.Open();
+                DataTable tabla = productosDAO.ObtenerProductos(filtro);
 
-                    string consulta = @"SELECT id_producto, nombre, descripcion_producto,
-                                      categoria, precio, stock, stock_minimo, activo
-                               FROM Productos
-                               WHERE nombre LIKE @filtro
-                                  OR categoria LIKE @filtro
-                                  OR descripcion_producto LIKE @filtro";
+                dgvProductos.DataSource = tabla;
 
-                    using (MySqlCommand cmd = new MySqlCommand(consulta, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@filtro", "%" + filtro + "%");
+                dgvProductos.Columns["id_producto"].HeaderText = "ID";
+                dgvProductos.Columns["nombre"].HeaderText = "Nombre";
+                dgvProductos.Columns["descripcion_producto"].HeaderText = "Descripción";
+                dgvProductos.Columns["categoria"].HeaderText = "Categoría";
+                dgvProductos.Columns["precio"].HeaderText = "Precio";
+                dgvProductos.Columns["stock"].HeaderText = "Existencias";
+                dgvProductos.Columns["stock_minimo"].HeaderText = "Stock mínimo";
+                dgvProductos.Columns["activo"].HeaderText = "Activo";
 
-                        DataTable tabla = new DataTable();
-
-                        using (MySqlDataAdapter adaptador = new MySqlDataAdapter(cmd))
-                        {
-                            adaptador.Fill(tabla);
-                        }
-
-                        dgvProductos.DataSource = tabla;
-                        dgvProductos.Columns["id_producto"].HeaderText = "ID";
-                        dgvProductos.Columns["nombre"].HeaderText = "Nombre";
-                        dgvProductos.Columns["descripcion_producto"].HeaderText = "Descripción";
-                        dgvProductos.Columns["categoria"].HeaderText = "Categoría";
-                        dgvProductos.Columns["precio"].HeaderText = "Precio";
-                        dgvProductos.Columns["stock"].HeaderText = "Existencias";
-                        dgvProductos.Columns["stock_minimo"].HeaderText = "Stock mínimo";
-                        dgvProductos.Columns["activo"].HeaderText = "Activo";
-
-                        dgvProductos.Columns["precio"].DefaultCellStyle.Format = "C2";
-                    }
-                }
+                dgvProductos.Columns["precio"].DefaultCellStyle.Format = "C2";
             }
             catch (MySqlException ex)
             {
@@ -82,6 +71,7 @@ namespace PuntoVentaApp
         {
             CargarProductos(txtBuscar.Text.Trim());
         }
+
         private void LimpiarCampos()
         {
             txtNombre.Clear();
@@ -126,29 +116,14 @@ namespace PuntoVentaApp
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
-                {
-                    conn.Open();
-
-                    string consulta = @"INSERT INTO Productos
-                               (nombre, descripcion_producto, categoria,
-                                precio, stock, stock_minimo, activo)
-                               VALUES
-                               (@nombre, @descripcion, @categoria,
-                                @precio, @stock, @stockMinimo, TRUE)";
-
-                    using (MySqlCommand cmd = new MySqlCommand(consulta, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@nombre", nombre);
-                        cmd.Parameters.AddWithValue("@descripcion", descripcion);
-                        cmd.Parameters.AddWithValue("@categoria", categoria);
-                        cmd.Parameters.AddWithValue("@precio", precio);
-                        cmd.Parameters.AddWithValue("@stock", stock);
-                        cmd.Parameters.AddWithValue("@stockMinimo", stockMinimo);
-
-                        cmd.ExecuteNonQuery();
-                    }
-                }
+                productosDAO.AgregarProducto(
+                    nombre,
+                    descripcion,
+                    categoria,
+                    precio,
+                    stock,
+                    stockMinimo
+                );
 
                 MessageBox.Show("Producto agregado correctamente.");
 
@@ -242,32 +217,15 @@ namespace PuntoVentaApp
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
-                {
-                    conn.Open();
-
-                    string consulta = @"UPDATE Productos
-                               SET nombre = @nombre,
-                                   descripcion_producto = @descripcion,
-                                   categoria = @categoria,
-                                   precio = @precio,
-                                   stock = @stock,
-                                   stock_minimo = @stockMinimo
-                               WHERE id_producto = @id";
-
-                    using (MySqlCommand cmd = new MySqlCommand(consulta, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@nombre", nombre);
-                        cmd.Parameters.AddWithValue("@descripcion", descripcion);
-                        cmd.Parameters.AddWithValue("@categoria", categoria);
-                        cmd.Parameters.AddWithValue("@precio", precio);
-                        cmd.Parameters.AddWithValue("@stock", stock);
-                        cmd.Parameters.AddWithValue("@stockMinimo", stockMinimo);
-                        cmd.Parameters.AddWithValue("@id", idProducto);
-
-                        cmd.ExecuteNonQuery();
-                    }
-                }
+                productosDAO.EditarProducto(
+                    idProducto,
+                    nombre,
+                    descripcion,
+                    categoria,
+                    precio,
+                    stock,
+                    stockMinimo
+                );
 
                 MessageBox.Show("Producto actualizado correctamente.");
 
@@ -315,19 +273,7 @@ namespace PuntoVentaApp
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(cadenaConexion))
-                {
-                    conn.Open();
-
-                    string consulta = "DELETE FROM Productos WHERE id_producto = @id";
-
-                    using (MySqlCommand cmd = new MySqlCommand(consulta, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@id", idProducto);
-
-                        cmd.ExecuteNonQuery();
-                    }
-                }
+                productosDAO.EliminarProducto(idProducto);
 
                 MessageBox.Show("Producto eliminado correctamente.");
 

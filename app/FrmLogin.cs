@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using MySqlConnector;
+using PuntoVentaApp.Datos;
 
 namespace PuntoVentaApp
 {
@@ -14,6 +15,8 @@ namespace PuntoVentaApp
         public FrmLogin()
         {
             InitializeComponent();
+            EstiloUI.Aplicar(this);
+            EstiloUI.AgregarFranjaSuperior(this);
         }
 
         private void btnIniciarSesion_Click(object sender, EventArgs e)
@@ -29,53 +32,41 @@ namespace PuntoVentaApp
 
             try
             {
-                MySqlConnectionStringBuilder conexion =
-                    new MySqlConnectionStringBuilder();
+                LoginDAO loginDAO = new LoginDAO();
 
-                conexion.Server = "localhost";
-                conexion.Port = 3306;
-                conexion.Database = "punto_venta";
-                conexion.UserID = usuario;
-                conexion.Password = password;
+                string perfil;
+                string cadenaConexion;
 
-                using (MySqlConnection conn =
-                    new MySqlConnection(conexion.ConnectionString))
+                bool acceso = loginDAO.IniciarSesion(
+                    usuario,
+                    password,
+                    out perfil,
+                    out cadenaConexion
+                );
+
+                if (!acceso)
                 {
-                    conn.Open();
-
-                    string perfil = "";
-
-                    if (usuario == "admin_pv")
-                    {
-                        perfil = "Administrador";
-                    }
-                    else if (usuario == "operador_pv")
-                    {
-                        perfil = "Operador";
-                    }
-                    else
-                    {
-                        MessageBox.Show("Usuario no autorizado.");
-                        return;
-                    }
-
-                    MessageBox.Show(
-                        "Bienvenido, " + perfil + ".",
-                        "Inicio de sesión exitoso"
-                    );
-
-                    // Abrir menú principal
-                    FrmMenuPrincipal menu = new FrmMenuPrincipal(
-                        usuario,
-                        perfil,
-                        this,
-                        conexion.ConnectionString
-                    );
-                    menu.Show();
-
-                    // Ocultar ventana de Login
-                    this.Hide();
+                    MessageBox.Show("Usuario no autorizado.");
+                    return;
                 }
+
+                MessageBox.Show(
+                    "Bienvenido, " + perfil + ".",
+                    "Inicio de sesión exitoso"
+                );
+
+                // Abrir menú principal
+                FrmMenuPrincipal menu = new FrmMenuPrincipal(
+                    usuario,
+                    perfil,
+                    this,
+                    cadenaConexion
+                );
+
+                menu.Show();
+
+                // Ocultar ventana de Login
+                this.Hide();
             }
             catch (MySqlException)
             {
